@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: address-service
+          uri: lb://ADDRESS-SERVICE
+          predicates:
+            - Path=/add/**
+          filters:
+            # Example of disabling a filter, ensure your filter is not listed here
+            - StripPrefix=1
+          # Filters are commented out to disable authentication for this route
+          # filters:
+          #   - name: AuthenticationFilter
+
+        - id: employee-service
+          uri: lb://EMPLOYEE-SERVICE
+          predicates:
+            - Path=/emp/**
+          filters:
+            # Example of disabling a filter, ensure your filter is not listed here
+            - StripPrefix=1
+          # Filters are commented out to disable authentication for this route
+          # filters:
+          #   - name: AuthenticationFilter
+
+        - id: identity-service
+          uri: lb://IDENTITY-SERVICE
+          predicates:
+            - Path=/auth/**
+          filters:
+            # Example of disabling a filter, ensure your filter is not listed here
+            - StripPrefix=1
+            
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+
+server:
+  port: 8090
